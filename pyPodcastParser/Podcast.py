@@ -248,7 +248,10 @@ class Podcast():
     def set_description(self):
         """Parses description and sets value"""
         try:
-            self.description = self.soup.find('description').string
+            desc_text = self.soup.find('description').get_text(strip=True)
+            if ('<' or '>') in desc_text:
+                desc_text = BeautifulSoup(desc_text,'html.parser').get_text(strip=True)
+            self.description = desc_text
         except AttributeError:
             self.description = None
 
