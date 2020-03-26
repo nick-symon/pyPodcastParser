@@ -33,6 +33,7 @@ class Podcast():
         image_soup (bs4.BeautifulSoup): soup of image
         full_soup (bs4.BeautifulSoup): A soup of the xml with items
         categories (list): List for strings representing the feed categories
+        atom_link (str): The rss feed hyperlink
         copyright (str): The feed's copyright
         creative_commons (str): The feed's creative commons license
         items (item): Item objects
@@ -119,6 +120,7 @@ class Podcast():
 
     def to_dict(self):
         podcast_dict = {}
+        podcast_dict['atom_link'] = self.atom_link
         podcast_dict['categories'] = self.categories
         podcast_dict['copyright'] = self.copyright
         podcast_dict['creative_commons'] = self.creative_commons
@@ -178,6 +180,7 @@ class Podcast():
 
     def set_optional_elements(self):
         """Sets elements considered option by RSS spec"""
+        self.set_atom_link()
         self.set_categories()
         self.set_copyright()
         self.set_generator()
@@ -216,6 +219,13 @@ class Podcast():
             if item:
                 self.items.append(item)
 
+    def set_atom_link(self):
+        """Parses and set feed atom link href"""
+        try:
+            self.atom_link = self.soup.find('atom:link', attrs={"rel":"self"})['href']
+        except AttributeError:
+            self.atom_link = None
+        
     def set_categories(self):
         """Parses and set feed categories"""
         self.categories = []
