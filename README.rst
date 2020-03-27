@@ -47,6 +47,7 @@ Podcast
 -------
 
 * categories (list) A list for strings representing the feed categories
+* atom_link (str): The rss feed hyperlink
 * copyright (string): The feed's copyright
 * creative_commons (string): The feed's creative commons license
 * items (list): A list of Item objects
