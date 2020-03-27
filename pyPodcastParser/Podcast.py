@@ -222,7 +222,11 @@ class Podcast():
     def set_atom_link(self):
         """Parses and set feed atom link href"""
         try:
-            self.atom_link = self.soup.find('atom:link', attrs={"rel":"self"})['href']
+            atom_link = self.soup.find('atom:link', attrs={"rel":"self"})
+            if atom_link:
+                self.atom_link = atom_link['href']
+            else:
+                self.atom_link = None
         except AttributeError:
             self.atom_link = None
         

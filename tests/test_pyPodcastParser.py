@@ -3,7 +3,7 @@ import datetime
 import os
 import unittest
 
-from pyPodcastParser import Podcast
+from pyPodcastParser.Podcast import Podcast
 
 # py.test test_pyPodcastParser.py
 
@@ -27,7 +27,7 @@ class Test_Valid_RSS_Check(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'itunes_block_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_is_valid_rss(self):
         self.assertEqual(self.podcast.is_valid_rss, True)
@@ -42,7 +42,7 @@ class Test_Invalid_RSS_Check(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'missing_info_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_is_valid_rss(self):
         self.assertEqual(self.podcast.is_valid_rss, False)
@@ -57,7 +57,7 @@ class Test_Basic_Feed_Item_Blocked(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'itunes_block_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_item_itunes_block(self):
         self.assertEqual(self.podcast.itunes_block, True)
@@ -75,7 +75,7 @@ class Test_Basic_Feed_Items(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'basic_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
 
 
@@ -90,9 +90,7 @@ class Test_Basic_Feed_Items(unittest.TestCase):
     def test_item_creative_commons(self):
         self.assertEqual(self.podcast.items[0].creative_commons, "http://www.creativecommons.org/licenses/by-nc/1.0")
         self.assertEqual(self.podcast.items[1].creative_commons, None)
-
-
-
+    
     def test_item_categories(self):
         self.assertTrue("Grateful Dead" in self.podcast.items[0].categories)
         self.assertTrue("Dead and Grateful" in self.podcast.items[1].categories)
@@ -183,7 +181,7 @@ class Test_Basic_Feed(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'basic_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_loding_of_basic_podcast(self):
         self.assertIsNotNone(self.basic_podcast)
@@ -191,6 +189,9 @@ class Test_Basic_Feed(unittest.TestCase):
     def test_dict(self):
         feed_dict = self.podcast.to_dict()
         self.assertTrue(type(feed_dict) is dict)
+
+    def test_atom_link(self):
+        self.assertEqual(self.podcast.atom_link, "https://audioboom.com/channels/5013228.rss")
 
     def test_categories(self):
         self.assertTrue("Example category 2" in self.podcast.categories)
@@ -303,11 +304,13 @@ class Test_Unicode_Feed(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'unicode_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_loding_of_basic_podcast(self):
         self.assertIsNotNone(self.basic_podcast)
 
+    def test_atom_link(self):
+        self.assertIsNone(self.podcast.atom_link)
 
     def test_copyright(self):
         self.assertEqual(self.podcast.copyright, self.unicodeish_text)
@@ -387,11 +390,13 @@ class Test_Missing_Info_Feed(unittest.TestCase):
         basic_podcast_path = os.path.join(test_feeds_dir, 'missing_info_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_loding_of_basic_podcast(self):
         self.assertIsNotNone(self.basic_podcast)
 
+    def test_atom_link(self):
+        self.assertIsNone(self.podcast.atom_link)
 
     def test_categories(self):
         self.assertFalse("Example category 2" in self.podcast.categories)
@@ -506,7 +511,7 @@ class Test_Itunes_Block_Feed(unittest.TestCase):
             test_feeds_dir, 'itunes_block_podcast.rss')
         basic_podcast_file = open(basic_podcast_path, "r")
         self.basic_podcast = basic_podcast_file.read()
-        self.podcast = Podcast.Podcast(self.basic_podcast)
+        self.podcast = Podcast(self.basic_podcast)
 
     def test_itunes_block(self):
         self.assertEqual(self.podcast.itunes_block, True)
