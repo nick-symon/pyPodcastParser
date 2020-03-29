@@ -24,6 +24,8 @@ class Item(object):
         enclosure_type (str): File MIME type
         enclosure_length (int): File size in bytes
         guid (str): globally unique identifier
+        itunes_season(str): Podcast season number
+        itunes_episode(str): Podcast episode number
         itunes_author_name (str): Author name given to iTunes
         itunes_block (bool): It this Item blocked from itunes
         itunes_closed_captioned: (str): It is this item have closed captions
@@ -80,6 +82,8 @@ class Item(object):
         item['enclosure_length'] = self.enclosure_length
         item['enclosure_type'] = self.enclosure_type
         item['guid'] = self.guid
+        item['itunes_season'] = self.itunes_season
+        item['itunes_episode'] = self.itunes_episode
         item['itunes_author_name'] = self.itunes_author_name
         item['itunes_block'] = self.itunes_block
         item['itunes_closed_captioned'] = self.itunes_closed_captioned
@@ -193,6 +197,8 @@ class Item(object):
 
     def set_itunes_element(self):
         """Set each of the itunes elements."""
+        self.set_itunes_season()
+        self.set_itunes_episode()
         self.set_itunes_author_name()
         self.set_itunes_block()
         self.set_itunes_closed_captioned()
@@ -202,6 +208,20 @@ class Item(object):
         self.set_itunes_order()
         self.set_itunes_subtitle()
         self.set_itunes_summary()
+
+    def set_itunes_season(self):
+        """Parses season from itunes tags and sets value"""
+        try:
+            self.itunes_season = self.soup.find('itunes:season').string
+        except AttributeError:
+            self.itunes_season = None
+    
+    def set_itunes_episode(self):
+        """Parses episode from itunes tags and sets value"""
+        try:
+            self.itunes_episode = self.soup.find('itunes:episode').string
+        except AttributeError:
+            self.itunes_episode = None
 
     def set_itunes_author_name(self):
         """Parses author name from itunes tags and sets value"""

@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import email.utils
 from time import mktime
+import re
 
 from pyPodcastParser.Item import Item
 
@@ -222,7 +223,7 @@ class Podcast():
     def set_atom_link(self):
         """Parses and set feed atom link href"""
         try:
-            atom_link = self.soup.find('atom:link', attrs={"rel":"self"})
+            atom_link = self.soup.find(re.compile('atom.*:link'), attrs={"rel":"self"})
             if atom_link:
                 self.atom_link = atom_link['href']
             else:
