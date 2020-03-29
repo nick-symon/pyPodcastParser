@@ -91,6 +91,12 @@ class Test_Basic_Feed_Items(unittest.TestCase):
         self.assertEqual(self.podcast.items[0].creative_commons, "http://www.creativecommons.org/licenses/by-nc/1.0")
         self.assertEqual(self.podcast.items[1].creative_commons, None)
     
+    def test_item_itunes_season(self):
+        self.assertIsNone(self.podcast.items[1].itunes_season)
+
+    def test_item_itunes_episode(self):
+        self.assertIsNone(self.podcast.items[1].itunes_episode)  
+
     def test_item_categories(self):
         self.assertTrue("Grateful Dead" in self.podcast.items[0].categories)
         self.assertTrue("Dead and Grateful" in self.podcast.items[1].categories)
